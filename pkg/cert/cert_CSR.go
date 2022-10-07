@@ -113,9 +113,13 @@ func (c *Cert) decodeSec(sec *vault.Secret) (cert string, certCA string, err err
 	}
 
 	if certCAField, ok := sec.Data["ca_chain"]; ok {
-		certCAs, ok := certCAField.([]string)
-		if !ok {
-			return "", "", errors.New("failed to convert ca chain certificiate field to string")
+		var certCAs []string
+		for _, s := range certCAField.([]interface{}) {
+			casted, ok := s.(string)
+			if !ok {
+				return "", "", errors.New("failed to convert ca chain certificiate field to string")
+			}
+			certCAs = append(certCAs, casted)
 		}
 		certCA = strings.Join(certCAs, "\n")
 	} else {

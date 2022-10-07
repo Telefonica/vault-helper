@@ -33,7 +33,7 @@ verify: generate go_verify
 
 all: verify build
 
-build: generate go_build
+build: go_build
 
 test: go_generate go_test
 
